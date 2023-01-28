@@ -29,7 +29,23 @@ namespace CodeChallenge.Repositories
 
         public Employee GetById(string id)
         {
-            return _employeeContext.Employees.SingleOrDefault(e => e.EmployeeId == id);
+            var employee = new Employee() ;
+            var tpemmp = _employeeContext.Employees.ToArray();
+            foreach (var t in tpemmp)
+            {
+                if (t.EmployeeId == id)
+                {
+                    return t;
+                }
+            }
+            return null;
+        }
+
+        public List<Employee> GetReportById(string id)
+        {
+            //var referencedEmployees = new List<Employee>(employee.DirectReports.Count);
+            Employee employee = GetById(id);
+            return employee.DirectReports;
         }
 
         public Task SaveAsync()

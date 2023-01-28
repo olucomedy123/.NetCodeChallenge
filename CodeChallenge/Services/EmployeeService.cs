@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CodeChallenge.Models;
 using Microsoft.Extensions.Logging;
 using CodeChallenge.Repositories;
+using System.Collections;
 
 namespace CodeChallenge.Services
 {
@@ -35,6 +36,38 @@ namespace CodeChallenge.Services
             if(!String.IsNullOrEmpty(id))
             {
                 return _employeeRepository.GetById(id);
+            }
+
+            return null;
+        }
+
+        public ReportingStructure GetReportById(String id)
+        {
+            ReportingStructure reportingStructure = new ReportingStructure();
+            //reportingStructure.Employee = _employeeRepository.GetById(id);
+            if (!String.IsNullOrEmpty(id))
+            {
+                reportingStructure.Employee = _employeeRepository.GetById(id);
+                ArrayList arrayList= new ArrayList();
+                arrayList.Add(reportingStructure.Employee);
+                int count = 0;
+                while(arrayList.Count > 0)
+                {
+                    Employee tempEmployee = arrayList[0] as Employee;               
+                    if (tempEmployee.DirectReports != null)
+                    {
+                        for(int i = 0; i< tempEmployee.DirectReports.Count; i++)
+                        {
+                            arrayList.Add(tempEmployee.DirectReports[i]);
+                            count++;
+                        }
+                    }
+
+                    arrayList.RemoveAt(0);
+                }
+                //enter logic and while loop here
+                reportingStructure.numberOfReports = count;
+                return reportingStructure;
             }
 
             return null;
