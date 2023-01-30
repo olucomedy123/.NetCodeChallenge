@@ -43,8 +43,7 @@ namespace CodeChallenge.Services
 
         public ReportingStructure GetReportById(String id)
         {
-            ReportingStructure reportingStructure = new ReportingStructure();
-            //reportingStructure.Employee = _employeeRepository.GetById(id);
+            ReportingStructure reportingStructure = new ReportingStructure();           
             if (!String.IsNullOrEmpty(id))
             {
                 reportingStructure.Employee = _employeeRepository.GetById(id);
