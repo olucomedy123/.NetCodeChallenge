@@ -14,6 +14,7 @@ namespace CodeChallenge.Data
 
         }
         public DbSet<Employee> Employees { get; set; }
+        //added new dbset compensation
         public DbSet<Compensation> Compensations { get; set; }
 
     }

@@ -34,7 +34,10 @@ namespace CodeCodeChallenge.Tests.Integration
             _testServer.Dispose();
         }
 
-
+        /*This tests if a user wants to create a new employee and compensation at the same time that it will work and the data be updated
+         * to the correct dbset. I wanted to do this because a user would most likely want to create these two at the same time instead of doing
+         * one and then the other. Basically just to increase the options a user has even if this might not be a req for task 2.
+         */
         [TestMethod]
         public void CreateNewEmployeeAndCompensation_Returns_Created()
         {
@@ -71,6 +74,7 @@ namespace CodeCodeChallenge.Tests.Integration
             Assert.AreEqual(employee.Position, newEmployee.Employee.Position);
         }
 
+        //This creates a compensation for an employee that has already been created
         [TestMethod]
         public void CreateCompensation_Returns_Created()
         {
@@ -108,7 +112,7 @@ namespace CodeCodeChallenge.Tests.Integration
             Assert.AreEqual(employee.Position, newEmployee.Employee.Position);
         }
 
-
+        //This tests getting the compensation by employee id
         [TestMethod]
         public void GetCompensationByEmployeeId_Returns_Ok()
         {
@@ -150,6 +154,7 @@ namespace CodeCodeChallenge.Tests.Integration
             Assert.AreEqual(employee.Position, newCompensation.Employee.Position);
         }
 
+        //This tests if there is no employee id based on what the user requests, the api will return not found
         [TestMethod]
         public void GetEmployeeById_Returns_NotFound()
         {

@@ -20,6 +20,7 @@ namespace CodeChallenge.Services
             _logger = logger;
         }
 
+        //this add the compensation that is passed in the parameter if it isnt null
         public Compensation Create(Compensation compensation)
         {
             if(compensation != null)
@@ -31,6 +32,7 @@ namespace CodeChallenge.Services
             return null;
         }
 
+        //this gets the compensation based on the employee id
         public Compensation GetById(string id)
         {
             if(!String.IsNullOrEmpty(id))
@@ -40,7 +42,6 @@ namespace CodeChallenge.Services
 
             return null;
         }
-
         
     }
 }

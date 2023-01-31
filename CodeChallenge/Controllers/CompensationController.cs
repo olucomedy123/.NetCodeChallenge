@@ -22,11 +22,10 @@ namespace CodeChallenge.Controllers
             _compensationService = compensationService;
         }
 
-
+        //The api to to create a new compensation
         [HttpPost]
         public IActionResult CreateCompensation([FromBody] Compensation compensation)
         {
-            //_logger.LogDebug($"Received employee get request for '{id}'");
 
 
             _compensationService.Create(compensation);
@@ -34,10 +33,11 @@ namespace CodeChallenge.Controllers
             return CreatedAtRoute("GetCompensationById", new { id = compensation.Employee.EmployeeId }, compensation);
         }
 
+        //The api to get the compensation based on employee id
         [HttpGet("{id}", Name = "getCompensationById")]
         public IActionResult GetCompensationById(String id)
         {
-            _logger.LogDebug($"Received employee get request for '{id}'");
+            _logger.LogDebug($"Received Compensation get request for '{id}'");
 
             var compensation = _compensationService.GetById(id);
 

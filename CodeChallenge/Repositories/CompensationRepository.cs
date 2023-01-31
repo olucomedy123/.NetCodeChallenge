@@ -22,6 +22,11 @@ namespace CodeChallenge.Repositories
             _employeeRepository = employeeRepository;
         }
 
+        /*This will add a compensation to the compensation dbset. If the compensation passed in has a employee id but not an
+         * employee, then the code will call GetById to add the employee to the compensation. This is assuming the user
+         * knows what employee id to get similar to updating employee. Else the code will just create a new employee
+         * and add it to the dbset
+         */
         public Compensation Add(Compensation compensation)
         {
             if (compensation.EmployeeId != null && compensation.Employee == null)
