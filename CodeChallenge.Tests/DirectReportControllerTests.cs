@@ -34,7 +34,7 @@ namespace CodeCodeChallenge.Tests.Integration
             _testServer.Dispose();
         }
 
-
+        //This is to test when a user has multiple direct reports and it returns the correct number
         [TestMethod]
         public void GetDirectReportByEmployeeID()
         {
@@ -54,6 +54,47 @@ namespace CodeCodeChallenge.Tests.Integration
             Assert.AreEqual(numberofreports, employee.numberOfReports);
             Assert.AreEqual(expectedLastName, employee.Employee.LastName);
             Assert.AreEqual(expectedFirstName, employee.Employee.FirstName);
+
+        }
+
+        //This is to test if the employeeid does not return an employee and that the code returns not found
+        [TestMethod]
+        public void GetNotFoundDirectReportByEmployeeID()
+        {
+            // Arrange
+            var employeeId = "123";
+
+
+            // Execute
+            var getRequestTask = _httpClient.GetAsync($"api/DirectReport/{employeeId}");
+            var response = getRequestTask.Result;
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+
+        }
+
+        //This is to test if the employeeid returns an employee but that employee has 0 directreports.
+        [TestMethod]
+        public void GetZeroDirectReportByEmployeeID()
+        {
+            // Arrange
+            var employeeId = "62c1084e-6e34-4630-93fd-9153afb65309";
+            var expectedFirstName = "Pete";
+            var expectedLastName =  "Best";
+            var numberofreports = 0;
+
+            // Execute
+            var getRequestTask = _httpClient.GetAsync($"api/DirectReport/{employeeId}");
+            var response = getRequestTask.Result;
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            var employee = response.DeserializeContent<ReportingStructure>();
+            Assert.AreEqual(numberofreports, employee.numberOfReports);
+            Assert.AreEqual(expectedLastName, employee.Employee.LastName);
+            Assert.AreEqual(expectedFirstName, employee.Employee.FirstName);
+
         }
 
     }

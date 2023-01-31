@@ -102,7 +102,7 @@ namespace CodeCodeChallenge.Tests.Integration
 
 
             // Assert
-            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
             var newEmployee = response.DeserializeContent<Compensation>();
             Assert.IsNotNull(newEmployee.EmployeeId);

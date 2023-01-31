@@ -53,7 +53,7 @@ namespace CodeChallenge.Services
             {
                 reportingStructure.Employee = _employeeRepository.GetById(id);
                 ArrayList arrayList= new ArrayList();
-                arrayList.Add(reportingStructure.Employee);
+                if (reportingStructure.Employee != null) { arrayList.Add(reportingStructure.Employee); }
                 int count = 0;
                 while(arrayList.Count > 0)
                 {
