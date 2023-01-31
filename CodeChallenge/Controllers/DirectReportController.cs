@@ -22,18 +22,18 @@ namespace CodeChallenge.Controllers
             _employeeService = employeeService;
         }
 
-
+        //Get Restapi for getting reporting structure
         [HttpGet("{id}", Name = "GetReportingStructureById")]
         public IActionResult GetReportingStructureById(String id)
         {
-            _logger.LogDebug($"Received employee get request for '{id}'");
+            _logger.LogDebug($"Received Reports get request for '{id}'");
 
-           var employee = _employeeService.GetReportById(id);
+           var reports = _employeeService.GetReportById(id);
 
-            if (employee == null)
+            if (reports.Employee == null)
                return NotFound();
 
-            return Ok(employee);
+            return Ok(reports);
         }
 
     }

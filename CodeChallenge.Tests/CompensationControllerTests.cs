@@ -34,9 +34,12 @@ namespace CodeCodeChallenge.Tests.Integration
             _testServer.Dispose();
         }
 
-
+        /*This tests if a user wants to create a new employee and compensation at the same time that it will work and the data be updated
+         * to the correct dbset. I wanted to do this because a user would most likely want to create these two at the same time instead of doing
+         * one and then the other. Basically just to increase the options a user has even if this might not be a req for task 2.
+         */
         [TestMethod]
-        public void CreateEmployee_Returns_Created()
+        public void CreateNewEmployeeAndCompensation_Returns_Created()
         {
             // Arrange
             var employee = new Employee()
@@ -49,7 +52,6 @@ namespace CodeCodeChallenge.Tests.Integration
             //create compensation here
             var compisation = new Compensation()
             {
-                EmployeeId = "12",
                 Employee = employee,
                 Salary = "2",
                 EffectiveDate = "11/20/2023",
@@ -71,21 +73,61 @@ namespace CodeCodeChallenge.Tests.Integration
             Assert.AreEqual(employee.Department, newEmployee.Employee.Department);
             Assert.AreEqual(employee.Position, newEmployee.Employee.Position);
         }
+
+        //This creates a compensation for an employee that has already been created
         [TestMethod]
-        public void GetEmployeeById_Returns_Ok()
+        public void CreateCompensation_Returns_Created()
         {
+            // Arrange
+            //create compensation here
             var employee = new Employee()
             {
-                Department = "Complaints",
-                FirstName = "Debbie",
-                LastName = "Downer",
-                Position = "Receiver",
+                EmployeeId = "03aa1462-ffa9-4978-901b-7c001562cf6f",
+                Department = "Engineering",
+                FirstName = "Ringo",
+                LastName = "Starr",
+                Position = "Developer V",
             };
-            //create compensation here
             var compisation = new Compensation()
             {
-                EmployeeId = "12",
-                Employee = employee,
+                EmployeeId = "03aa1462-ffa9-4978-901b-7c001562cf6f",
+                Salary = "2",
+                EffectiveDate = "11/20/2023",
+            };
+            var requestContent = new JsonSerialization().ToJson(compisation);
+
+            // Execute
+            var postRequestTask = _httpClient.PostAsync("api/CompensationService",
+               new StringContent(requestContent, Encoding.UTF8, "application/json"));
+            var response = postRequestTask.Result;
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+
+            var newEmployee = response.DeserializeContent<Compensation>();
+            Assert.IsNotNull(newEmployee.EmployeeId);
+            Assert.AreEqual(employee.FirstName, newEmployee.Employee.FirstName);
+            Assert.AreEqual(employee.LastName, newEmployee.Employee.LastName);
+            Assert.AreEqual(employee.Department, newEmployee.Employee.Department);
+            Assert.AreEqual(employee.Position, newEmployee.Employee.Position);
+        }
+
+        //This tests getting the compensation by employee id
+        [TestMethod]
+        public void GetCompensationByEmployeeId_Returns_Ok()
+        {
+            // Arrange
+            var employee = new Employee()
+            {
+                EmployeeId = "03aa1462-ffa9-4978-901b-7c001562cf6f",
+                Department = "Engineering",
+                FirstName = "Ringo",
+                LastName = "Starr",
+                Position = "Developer V",
+            };
+            var compisation = new Compensation()
+            {
+                EmployeeId = "03aa1462-ffa9-4978-901b-7c001562cf6f",
                 Salary = "2",
                 EffectiveDate = "11/20/2023",
             };
@@ -102,14 +144,49 @@ namespace CodeCodeChallenge.Tests.Integration
 
 
             // Assert
-            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            var newEmployee = response.DeserializeContent<Compensation>();
-            Assert.IsNotNull(newEmployee.EmployeeId);
-            //Assert.AreEqual(employee.FirstName, newEmployee.Employee.FirstName);
-            //Assert.AreEqual(employee.LastName, newEmployee.Employee.LastName);
-            //Assert.AreEqual(employee.Department, newEmployee.Employee.Department);
-            //Assert.AreEqual(employee.Position, newEmployee.Employee.Position);
+            var newCompensation = response.DeserializeContent<Compensation>();
+            Assert.IsNotNull(newCompensation.EmployeeId);
+            Assert.AreEqual(employee.FirstName, newCompensation.Employee.FirstName);
+            Assert.AreEqual(employee.LastName, newCompensation.Employee.LastName);
+            Assert.AreEqual(employee.Department, newCompensation.Employee.Department);
+            Assert.AreEqual(employee.Position, newCompensation.Employee.Position);
+        }
+
+        //This tests if there is no employee id based on what the user requests, the api will return not found
+        [TestMethod]
+        public void GetEmployeeById_Returns_NotFound()
+        {
+            // Arrange
+            var employee = new Employee()
+            {
+                Department = "Engineering",
+                FirstName = "Ringo",
+                LastName = "Starr",
+                Position = "Developer V",
+            };
+            var compisation = new Compensation()
+            {
+                Salary = "2",
+                Employee = employee,
+                EffectiveDate = "11/20/2023",
+            };
+            var requestContent = new JsonSerialization().ToJson(compisation);
+
+            // Execute
+            var postRequestTask = _httpClient.PostAsync("api/CompensationService",
+               new StringContent(requestContent, Encoding.UTF8, "application/json"));
+            var postResponse = postRequestTask.Result;
+            var getEmployee = postResponse.DeserializeContent<Compensation>();
+            var employeeId = "1";
+            var getRequestTask = _httpClient.GetAsync($"api/CompensationService/{employeeId}");
+            var response = getRequestTask.Result;
+
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+
         }
     }
 } 
