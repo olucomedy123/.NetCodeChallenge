@@ -22,7 +22,7 @@ namespace CodeChallenge.Controllers
             _employeeService = employeeService;
         }
 
-
+        //Get Restapi for getting reporting structure
         [HttpGet("{id}", Name = "GetReportingStructureById")]
         public IActionResult GetReportingStructureById(String id)
         {

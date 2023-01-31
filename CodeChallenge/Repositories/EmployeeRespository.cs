@@ -27,9 +27,13 @@ namespace CodeChallenge.Repositories
             return employee;
         }
 
+        /*This stores all of the Empployees into an array and then checks if an employee id in the array matches
+         * the id that was passed in. I did this because the original code never returned an employess directreports.
+         */
         public Employee GetById(string id)
         {
-            var employee = new Employee() ;
+            
+
             var tpemmp = _employeeContext.Employees.ToArray();
             foreach (var t in tpemmp)
             {
@@ -41,9 +45,9 @@ namespace CodeChallenge.Repositories
             return null;
         }
 
+        //This gets the direct reports of a specific user
         public List<Employee> GetReportById(string id)
-        {
-            //var referencedEmployees = new List<Employee>(employee.DirectReports.Count);
+        {           
             Employee employee = GetById(id);
             return employee.DirectReports;
         }

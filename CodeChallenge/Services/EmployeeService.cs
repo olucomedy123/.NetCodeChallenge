@@ -40,7 +40,12 @@ namespace CodeChallenge.Services
 
             return null;
         }
-
+        
+        /*This method creates a new reporting structure. Then it will get the employee that you want to get a direct
+         * report from first and add it to an arraylist. When a user has a directreport, the employee will be added
+         * to the array list. Once that is done, the element will be removed from the arraylist. The loop will continue
+         * until there is no more elements in the list.
+        */
         public ReportingStructure GetReportById(String id)
         {
             ReportingStructure reportingStructure = new ReportingStructure();           
@@ -63,8 +68,7 @@ namespace CodeChallenge.Services
                     }
 
                     arrayList.RemoveAt(0);
-                }
-                //enter logic and while loop here
+                }             
                 reportingStructure.numberOfReports = count;
                 return reportingStructure;
             }
